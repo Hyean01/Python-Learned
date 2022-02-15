@@ -14,22 +14,23 @@ while True:
 	low, high = 0, guess_range
 	print(f"即将开始第{cycle}轮数字游戏……祝你好运！")
 	begin_time = time.time()
-	guess = int(input(f'我想了一个幸运数字，范围是[{low},{high}],请你来猜一猜呀~\n温馨提示：只有{guess_limit}次尝试机会哦~请好好考虑后再开始猜数哈~\n'))
-	for i in range(1, guess_limit):
+	guess = int(input(f'我想了一个幸运数字，范围是[{low},{high}],请你来猜一猜呀~\n温馨提示：'
+					  f'只有{guess_limit}次尝试机会哦~请好好考虑后再开始猜数哈~\n请开始--->'))
+	guess_count = 1
+	for i in range(guess_limit):
 		is_right = False
-		# guess_count += 1
-		if lucky == guess:
+		guess_count += 1
+		if lucky == guess and guess_count < 4:
 			is_right = True
 			break
-		elif lucky > guess:
+		elif lucky > guess and guess_count < 4:
 			low = guess
 			guess = int(input(f"不好意思，幸运数字在({low},{high}]\n请继续--->"))
-		elif lucky < guess and guess < 101:
+		elif (lucky < guess <= guess_range) and guess_count < 4:
 			high = guess
 			guess = int(input(f"不好意思，幸运数字在[{low},{high})\n请继续--->"))
-		else:
-			guess = int(input(f"不好意思，幸运数字在[{low},{high})\n请继续--->"))
-
+		elif (lucky < guess and guess > guess_range) and guess_count < 4:
+			guess = int(input(f"不好意思，您猜的数字太大咯，\n请继续--->"))
 			
 
 	# 结果处理
@@ -46,7 +47,7 @@ while True:
 	score.append((cycle, is_right, use_time))
 	print("===========战绩===========")
 	for _cycle, _is_right, _use_time in score:
-		label = "胜利✌" if _is_right else "失败😢"
+		label = "胜利" if _is_right else "失败"
 		print(f"第{_cycle}轮, {label}, 用时 {_use_time}秒")
 	print("==========================")
 
