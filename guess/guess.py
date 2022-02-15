@@ -2,7 +2,11 @@ import random
 import sys	# 系统模块
 import time
 
-guess_limit, guess_range = int(sys.argv[1]), int(sys.argv[2])
+guess_limit, guess_range = 3, 100
+try:
+	guess_limit, guess_range = int(sys.argv[1]), int(sys.argv[2])
+except:  # 异常处理模块
+	print("输入值异常，使用默认值继续游戏！")
 # sys.argv[]  就是取从命令行传入的参数， 命令行输入 python guess.py  3----相当于传了guess.py 和 3这两个参数
 # print(sys.argv)
 # print(lucky)
