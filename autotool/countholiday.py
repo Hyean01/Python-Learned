@@ -1,7 +1,6 @@
 #!/usr/bin/env python 
 # -- coding:utf-8 -- ->
-# hyean.qin@gmail.com   
-# Hyean121021
+# hyean.qin@gmail.com
 from colorama import init, Fore
 from zhdate import ZhDate
 import datetime
