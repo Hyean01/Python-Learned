@@ -1,72 +1,42 @@
 import random
-import sys  # 系统模块
 import time
+import guess_level1
 
-guess_limit, guess_range = 3, 100
-try:
-    guess_limit, guess_range = int(sys.argv[1]), int(sys.argv[2])
-except:  # 异常处理模块
-    print("输入值异常，使用默认值继续游戏！")
-# sys.argv[]  就是取从命令行传入的参数， 命令行输入 python guess.py  3----相当于传了guess.py 和 3这两个参数
-# print(sys.argv)
-# print(lucky)
+
+# 获取本次游戏参数
+guess_limit, guess_range = guess_level1.input_limit_range()
+# 准备数据结构
 cycle = 1  # 记录当前游戏轮数
 score = []  # 记录每一轮的战绩
+# 游戏执行
 while True:
-    # generate a lucky number
     lucky = random.randint(0, guess_range)
-    low, high = 0, guess_range
-    print(f"即将开始第{cycle}轮数字游戏……祝你好运！")
+    print(f"即将开始第{cycle}轮数字游戏……祝你好运！本轮提示：幸运数字范围在[0, {guess_range}]\n"
+          f"请开始--->", end= "")
+    # 获取游戏开始时间
     begin_time = time.time()
-    try:
-        guess = int(input(f'我想了一个幸运数字，范围是[{low},{high}],请你来猜一猜呀~\n温馨提示：'
-                          f'只有{guess_limit}次尝试机会哦~请好好考虑后再开始猜数哈~\n请开始--->'))
-    except:
-        print("你输入的值不符合，请输入数字哦")
-        try:
-            guess = int(input(f"请输入--->"))
-        except:
-            print(f"抱歉，输入有误，游戏将退出,谢谢参与。")
-            break
-    guess_count = 1
+    # 开始猜测
     for i in range(guess_limit):
+        try:
+            guess = int(input())
+        except:
+            print("你输入的值不符合，请输入数字哦")
+            try:
+                guess = int(input(f"请输入--->"))
+            except:
+                print(f"抱歉，输入有误，游戏将退出,谢谢参与。")
+                break
+
         is_right = False
-        guess_count += 1
-        if lucky == guess and guess_count < 4:
+        if lucky == guess:
             is_right = True
             break
-        elif lucky > guess and guess_count < 4:
-            low = guess
-            try:
-                guess = int(input(f"不好意思，幸运数字在({low},{high}]\n请继续--->"))
-            except:
-                print("你输入的值不符合，请输入数字哦")
-                try:
-                    guess = int(input(f"请输入--->"))
-                except:
-                    print(f"抱歉，输入有误，游戏将退出,谢谢参与。")
-                    break
-        elif (lucky < guess <= guess_range) and guess_count < 4:
-            high = guess
-            try:
-                guess = int(input(f"不好意思，幸运数字在[{low},{high})\n请继续--->"))
-            except:
-                print("你输入的值不符合，请输入数字哦")
-                try:
-                    guess = int(input(f"请输入--->"))
-                except:
-                    print(f"抱歉，输入有误，游戏将退出,谢谢参与。")
-                    break
-        elif (lucky < guess and guess > guess_range) and guess_count < 4:
-            try:
-                guess = int(input(f"不好意思，您猜的数字太大咯，\n请继续--->"))
-            except:
-                print("你输入的值不符合，请输入数字哦")
-                try:
-                    guess = int(input(f"请输入--->"))
-                except:
-                    print(f"抱歉，输入有误，游戏将退出,谢谢参与。")
-                    break
+        elif lucky > guess:
+            print("你猜的数字太小了", end=",")
+        elif lucky < guess:
+            print("你猜的数字太大了", end=",")
+        if i < guess_limit - 1:
+            print("请继续", end="--->")
 
     # 结果处理
     if is_right:
@@ -74,19 +44,17 @@ while True:
     else:
         print('不好意思，机会已经用完了，你没猜中。下次再来吧~88')
 
-    end_time = time.time()
-    use_time = round((end_time - begin_time), 3)
-    print(f'本轮游戏共耗时：{use_time}秒')
+    # 计算本轮游戏耗时
+    use_time = guess_level1.calc_time(begin_time)
 
-    # 保存战绩
+    # 保存本轮战绩
     score.append((cycle, is_right, use_time))
-    print("===========战绩===========")
-    for _cycle, _is_right, _use_time in score:
-        label = "胜利" if _is_right else "失败"
-        print(f"第{_cycle}轮, {label}, 用时 {_use_time}秒")
-    print("==========================")
 
-    cycle += 1  # 战绩已记录，即将开始下一轮
+    # 输出全部成绩
+    guess_level1.print_score(score)
+
+    # 战绩已记录，即将开始下一轮
+    cycle += 1
     conf = input('如果想重新开始，请输入y，输入其他将退出游戏\n --->')
     if (conf != 'y'):
         print('欢迎下次再来~886')
