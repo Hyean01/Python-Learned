@@ -16,6 +16,9 @@
 # 1. 函数就是一个对象，有自己的属性，可以被赋值，可以被传递
 # 2. 函数可以作为参数
 
+# 匿名函数
+# 1. 没有名称的一行函数 lambda
+
 def bmi(height, weight):
     """
     计算BMI的值：身高/（体重*体重）
@@ -46,9 +49,17 @@ def main(check):
     return res
 
 
+def process(numbers, calc):
+    """lambda函数运用"""
+    for n in numbers:
+        print(calc(n), end=",")
+
+
 if __name__ == '__main__':
     # print(bmi(1.53, 52))
     # print(bmi.__doc__)
     # print(height, pre_height(height))
     # print(height_2, pre_height2(height_2))
-    main(bmi)   # 以函数作为参数传递
+    # main(bmi)   # 以函数作为参数传递
+    f = lambda x:x*x if x%3 == 0 else x+2
+    process(range(13), f)
