@@ -13,7 +13,7 @@ def print_usage():
 
 print_usage()
 while True:
-    cmd = input(f"请输入命令： ")
+    cmd = input(f"请输入命令(“list”:显示用户列表 “名字 or 序号”：查看用户信息  “886”：退出程序)： ")
     if cmd == '886':
         print(f"再见啦~")
         break
