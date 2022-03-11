@@ -57,10 +57,10 @@ def find_name_byId(num):
 
 
 def show_record(id):
-    personal_records = [r for r in records if r[2][0] == id]
+    personal_records = name_dict[id]
     if personal_records:
         for r in personal_records:
-            print(f"{r[0][1]}（No.{r[0][0]}） {r[1]} {r[2][1]}, {r[-1]}")
+            print(f"{r[0][1]}（No.{r[0][0]}） {r[1]}我, {r[-1]}")
     else:
         print(f"暂无此用户的行为记录。")
 
