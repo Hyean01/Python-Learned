@@ -11,6 +11,8 @@ reduce_score_things = "打了、侮辱、辱骂、骂了、欺负、欺骗、错
 names = []      # 人物名字
 records = []    # 事件  张三 打了 李四 分数-1
 name_dict = {}  # 人物和事件记录，
+score_dict = {} # 人物分数汇总
+
 
 def mock_names():
     first_name_list = xing.replace(" ", "").split("、")
@@ -32,14 +34,14 @@ def mock_records():
         name1, name2 = random.sample(names, k=2)     # 随机抽取两个不重复的元素
         action = random.choice(things)
         if things.index(action) >= len(good_things):
-            score = "分数 -1"
+            score = "-1"
         else:
-            score = "分数 +1"
+            score = "+1"
         records.append((name1, action, name2, score))
     return records
 
 
-def build_dict():
+def build_name():
     """构建人物事件字典，一个人物会有多个记录，例如： {998：[recored1, recored2, ……]}"""
     for r in records:
         my_id = r[2][0]
@@ -49,11 +51,28 @@ def build_dict():
             name_dict[my_id] = [r]
 
 
+def build_score():
+    """每个人根据其相关事件，统计分数，基础分100， 例如{(998,李四）：{(112, 李毅):87, (113, 李玉):99, ……}}"""
+    for r in records:
+        account = r[2][0]   # 账户统计者
+        actioner = r[0][0]  # 对账户统计者施加行为的人
+        score = eval(r[3])  # 该事件造成的分数变动, 用eval()是因为 之前的分数用的是字符串，这样就可以去掉引号，成为数值
+        if account in score_dict.keys():
+            account_recore_id = score_dict[account].keys()  # score_dict[account]得出来的还是一个dict
+            if actioner in account_recore_id:
+                score_dict[account][actioner] += score
+            else:
+                score_dict[account][actioner] = 100 + score
+        else:
+            score_dict[account] = {actioner:100 + score}
+
+
 def mock_data():
     print(f"start mocking data")
     mock_names()
     mock_records()
-    build_dict()
+    build_name()
+    build_score()
     print(f"finished mock data")
 
 
