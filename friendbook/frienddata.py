@@ -65,6 +65,11 @@ def build_score():
                 score_dict[account][actioner] = 100 + score
         else:
             score_dict[account] = {actioner:100 + score}
+    # 根据score对字典进行排序
+    for sid in score_dict:
+        score = score_dict[sid]
+        sorted_score = {k:v for k, v in sorted(score.items(), key=lambda item:item[1])}
+        score_dict[sid] = sorted_score
 
 
 def mock_data():
