@@ -10,7 +10,8 @@ add_score_things = "点赞、赞美、帮助、关爱、正确引导、送礼物
 reduce_score_things = "打了、侮辱、辱骂、骂了、欺负、欺骗、错误引导、要挟、白嫖"    # 减分项
 names = []      # 人物名字
 records = []    # 事件  张三 打了 李四 分数-1
-name_dict = {}  # 人物和事件记录，
+names_dict = {}     # 人物以字典形式存储，这样就可以很快通过序号查找到人名
+records_dict = {}  # 人物和事件记录，
 score_dict = {} # 人物分数汇总
 
 
@@ -22,7 +23,9 @@ def mock_names():
         last_name = random.choice(last_name_list)
         name = first_name + last_name
         names.append(((i+1), name))
-    return names
+    # 构建人物map，以序号为key, 姓名为value
+    names_dict.update(dict(names))
+    return names, names_dict
 
 
 def mock_records():
@@ -38,17 +41,24 @@ def mock_records():
         else:
             score = "+1"
         records.append((name1, action, name2, score))
-    return records
-
-
-def build_name():
-    """构建人物事件字典，一个人物会有多个记录，例如： {998：[recored1, recored2, ……]}"""
+    # 构建人物和事件的map
     for r in records:
         my_id = r[2][0]
-        if my_id in name_dict.keys():
-            name_dict[my_id].append(r)
+        if my_id in records_dict.keys():
+            records_dict[my_id].append(r)
         else:
-            name_dict[my_id] = [r]
+            records_dict[my_id] = [r]
+    return records, records_dict
+
+
+# def build_name():
+#     """构建人物事件字典，一个人物会有多个记录，例如： {998：[recored1, recored2, ……]}"""
+#     for r in records:
+#         my_id = r[2][0]
+#         if my_id in name_dict.keys():
+#             name_dict[my_id].append(r)
+#         else:
+#             name_dict[my_id] = [r]
 
 
 def build_score():
@@ -72,18 +82,17 @@ def build_score():
         score_dict[sid] = sorted_score
 
 
+
 def mock_data():
-    print(f"start mocking data")
+    print(f"start mocking data……")
     mock_names()
     mock_records()
-    build_name()
     build_score()
-    print(f"finished mock data")
+    print(f"finished mock data。")
 
 
 mock_data()
 
 if __name__ == '__main__':
     mock_data()
-    # pprint.pprint(names, indent=0)
-    pprint.pprint(records)
+    pprint.pprint(names_dict, indent=0)

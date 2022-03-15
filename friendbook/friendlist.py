@@ -10,11 +10,17 @@ def show_list():
         print(f"{n[0]} {n[1]}")
 
 
-def show_person(name):
-    show_record(name[0])
+def show_person(id):
+    """
+    id: 用户id
+    """
+    show_record(id)
 
 
 def find_name(name):
+    """
+    name: 输入的名字或者ID
+    """
     # 根据输入的名字，查询是否在当前列表中，如果在，返回
     if name.isdigit():
         find_name_byId(name)
@@ -25,7 +31,7 @@ def find_name(name):
         elif len(fname) == 1:
             print(f"您要查找的用户信息以及交互记录如下：{fname[0]}")
             show_score_summary(fname[0][0])
-            show_person(fname[0])
+            show_person(fname[0][0])
         else:
             for n in fname:
                 print(f"{n[0]}. {n[1]}")
@@ -48,19 +54,21 @@ def find_name_byId(num):
     """根据输入数字，判断是否存在该用户，如果存在，进而查出该用户信息"""
     try:
         num = int(num)
-        if num not in range(1, len(names)):
+        if num not in range(1, len(names)+1):
             print(f"系统不存在您要查找的用户，请检查输入或与用户确认是否已注册。")
         else:
-            useinfo = (num, dict(names)[num])
-            print(f"您要查找的用户信息以及交互记录如下：{useinfo}")
+            print(f"您要查找的用户信息以及交互记录如下：{(num, names_dict[num])}")
             show_score_summary(num)
-            show_person(useinfo)
+            show_person(num)
     except:
         print("Value Error")
 
 
 def show_record(id):
-    personal_records = name_dict[id]
+    """
+    id: 用户id
+    """
+    personal_records = records_dict[id]
     if personal_records:
         for r in personal_records:
             print(f"{r[0][1]}（No.{r[0][0]}） {r[1]}我, 分数{r[-1]}")
@@ -69,8 +77,13 @@ def show_record(id):
 
 
 def show_score_summary(id):
+    """
+    id: 用户id
+    """
     if id in score_dict:
-        print(f"{score_dict[id]}")
+        for k,v in score_dict[id].items():
+            print(f"{names_dict[k]}:{v}", end=" ")
+        print("")
     else:
         print(f"暂无此用户的行为记录。")
 
